@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 const WorkoutForm = () => {
@@ -10,28 +11,24 @@ const WorkoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post(
-      "http://localhost:3001/api/workouts/",
-      { title: title, reps: reps, load: load },
-      {
-        headers: {
-          "content-type": "application/json",
-        },
-      }
-    );
-
-    const json = response.json();
-
-    if (!response.ok) {
-      setError(json.message);
-    }
-    if (response.ok) {
-      setTitle("");
-      setLoad("");
-      setReps("");
-      setError(null);
-      console.log("new workout add", json);
-    }
+    await axios
+      .post(
+        "http://localhost:3001/api/workouts/",
+        { title: title, reps: reps, load: load },
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          setError(error.response.data.message);
+        }
+      });
   };
 
   return (
@@ -64,10 +61,14 @@ const WorkoutForm = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button bg="#00ADB5" type="submit">
         Add workout
       </Button>
-      {error && <p>{error}</p>}
+      {error && (
+        <Alert key="warning" variant="warning" style={{marginTop: "15px"}}>
+          {error}
+        </Alert>
+      )}
     </Form>
   );
 };

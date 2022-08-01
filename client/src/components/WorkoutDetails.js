@@ -7,7 +7,7 @@ const WorkoutDetails = ({workout}) => {
     <Container>
       <Card style={{ marginTop: "30px" }} key={workout.key}>
         <Card.Body>
-          <Card.Title style={{ marginBottom: "15px" }}>
+          <Card.Title style={{ marginBottom: "15px" , color:'#00ADB5'}}>
             {workout.title}
           </Card.Title>
           <p>Load(kg) : {workout.load}</p>
