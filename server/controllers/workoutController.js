@@ -27,6 +27,20 @@ const createWorkout = async (req, res, next) => {
   const load = req.body.load;
   const reps = req.body.reps;
 
+  let emptyFields = [];
+  if (!title) {
+    emptyFields.push("title");
+  }
+  if (!load) {
+    emptyFields.push("load");
+  }
+  if (!reps) {
+    emptyFields.push("reps");
+  }
+  if (emptyFields.length > 0) {
+    res.status(400).json({ message: "Please fill in all the fields",emptyFields });
+  }
+
   try {
     const workout = await Workout.create({ title, load, reps });
     res.status(200).json(workout);
@@ -45,7 +59,7 @@ const deleteWorkout = async (req, res, next) => {
   if (!workout) {
     res.status(400).json("no such workout");
   }
-  res.status(200).json({ message: "workout deleted" });
+  res.status(200).json(workout);
 };
 
 //update a workout

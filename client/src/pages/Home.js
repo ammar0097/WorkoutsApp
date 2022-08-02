@@ -8,18 +8,18 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 // components
 import WorkoutDetails from "../components/WorkoutDetails";
 import WorkoutForm from "../components/WorkoutForm";
-import { WorkoutsContext } from "../context/WorkoutContext";
 
 const Home = () => {
-  const { workouts, dispatch } = useWorkoutsContext(WorkoutsContext);
+  const { workouts, dispatch } = useWorkoutsContext();
+  
   useEffect(() => {
-    const fetchWorkouts = async () => {
+    const fetchWorkouts =  () => {
       axios.get("http://localhost:3001/api/workouts/").then((response) => {
         dispatch({ type: "SET_WORKOUTS", payload: response.data });
       });
     };
     fetchWorkouts();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>
@@ -27,10 +27,12 @@ const Home = () => {
         <Col>
           {workouts &&
             workouts.map((workout) => (
-              <WorkoutDetails
-                key={workout._id}
-                workout={workout}
-              ></WorkoutDetails>
+              <div>
+                <WorkoutDetails
+                  key={workout._id}
+                  workout={workout}
+                ></WorkoutDetails>
+              </div>
             ))}
         </Col>
         <Col>
