@@ -46,6 +46,7 @@ const WorkoutForm = () => {
 
   return (
     <Form style={{ marginTop: "35px" }} onSubmit={handleSubmit}>
+      <h4>Add a New Workout</h4>
       <Form.Group className="mb-3">
         <Form.Label>Title</Form.Label>
         <Form.Control
