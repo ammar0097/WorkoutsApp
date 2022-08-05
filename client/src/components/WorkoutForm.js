@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+import { Button , Text } from "@chakra-ui/react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
@@ -46,7 +46,7 @@ const WorkoutForm = () => {
 
   return (
     <Form style={{ marginTop: "35px" }} onSubmit={handleSubmit}>
-      <h4>Add a New Workout</h4>
+      <Text fontSize="4xl">Add a new workout</Text>
       <Form.Group className="mb-3">
         <Form.Label>Title</Form.Label>
         <Form.Control
@@ -75,7 +75,7 @@ const WorkoutForm = () => {
         />
       </Form.Group>
 
-      <Button bg="#00ADB5" type="submit">
+      <Button colorScheme="teal" type="submit">
         Add workout
       </Button>
       {error && (
