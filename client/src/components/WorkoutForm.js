@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Button , Text } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 import { WorkoutsContext } from "../context/WorkoutContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const WorkoutForm = () => {
   const { dispatch } = useWorkoutsContext(WorkoutsContext);
@@ -12,9 +13,14 @@ const WorkoutForm = () => {
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
   const [error, setError] = useState(null);
+  const { user } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!user) {
+      setError('you must be logged in')
+      return
+    }
     await axios
       .post(
         "http://localhost:3001/api/workouts/",
@@ -22,6 +28,7 @@ const WorkoutForm = () => {
         {
           headers: {
             "content-type": "application/json",
+            "Authorization": `Bearer ${user.token}`,
           },
         }
       )

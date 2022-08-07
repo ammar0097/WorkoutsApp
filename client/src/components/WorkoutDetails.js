@@ -2,21 +2,34 @@ import { Button } from "@chakra-ui/react";
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import axios from "axios";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 import { AiFillDelete } from "react-icons/ai";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useAuthContext } from "../hooks/useAuthContext";
+
+
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext();
-  const clickHandler = () => {
-    axios
-      .delete("http://localhost:3001/api/workouts/" + workout._id)
-      .then((response) => {
-        dispatch({ type: "DELETE_WORKOUT", payload: response.data });
-      })
-      .catch();
+  const {user} = useAuthContext();
+  const clickHandler = async () => {
+    if(!user) {
+      return
+    }
+    const response = await fetch(
+      "http://localhost:3001/api/workouts/" + workout._id,
+      {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        },
+      }
+    );
+    const json = await response.json();
+    if (response.ok) {
+      dispatch({ type: "DELETE_WORKOUT", payload: json });
+    }
   };
   return (
     <Container>

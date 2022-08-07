@@ -1,25 +1,33 @@
 import React, { useEffect } from "react";
 import Container from "react-bootstrap/esm/Container";
-import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
-
 // components
 import WorkoutDetails from "../components/WorkoutDetails";
 import WorkoutForm from "../components/WorkoutForm";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Home = () => {
   const { workouts, dispatch } = useWorkoutsContext();
-  
+  const { user } = useAuthContext();
+
   useEffect(() => {
-    const fetchWorkouts =  () => {
-      axios.get("http://localhost:3001/api/workouts/").then((response) => {
-        dispatch({ type: "SET_WORKOUTS", payload: response.data });
+    const fetchWorkouts = async () => {
+      const response = await fetch("http://localhost:3001/api/workouts/", {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        },
       });
+      const json = await response.json();
+      if (response.ok) {
+        dispatch({ type: "SET_WORKOUTS", payload: json });
+      }
     };
-    fetchWorkouts();
-  }, [dispatch]);
+    if (user) {
+      fetchWorkouts();
+    }
+  }, [dispatch,user]);
 
   return (
     <Container>
