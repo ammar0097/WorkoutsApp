@@ -39,7 +39,7 @@ const Signup = () => {
           Submit
         </Button>
         {error && (
-          <Alert status="error">
+          <Alert status="error" style={{marginTop : 20}}>
             <AlertIcon />
             {error}
           </Alert>
