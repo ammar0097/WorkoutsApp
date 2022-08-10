@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { Button , Text } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import Container from "react-bootstrap/esm/Container";
 import { useLogin } from "../hooks/useLogin";
 import { Alert, AlertIcon } from "@chakra-ui/react";
 
 const Login = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signup, error, isLoading } = useLogin();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(email, password);
@@ -39,7 +41,7 @@ const Login = () => {
           Submit
         </Button>
         {error && (
-          <Alert status="error" style={{marginTop : 20}}>
+          <Alert status="error" style={{ marginTop: 20 }}>
             <AlertIcon />
             {error}
           </Alert>

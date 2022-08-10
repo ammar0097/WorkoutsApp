@@ -2,8 +2,10 @@ const Workout = require("../models/workout.js");
 const mongoose = require("mongoose");
 
 //get all workouts
-const getWorkouts = async (req, res, next) => {
-  const workouts = await Workout.find({}).sort({ createdAt: -1 });
+const getWorkouts = async (req, res) => {
+  const user_id  = req.user._id;
+
+  const workouts = await Workout.find({ user_id }).sort({ createdAt: -1 });
   res.status(200).json(workouts);
 };
 //get a single workout
@@ -38,11 +40,14 @@ const createWorkout = async (req, res, next) => {
     emptyFields.push("reps");
   }
   if (emptyFields.length > 0) {
-    res.status(400).json({ message: "Please fill in all the fields",emptyFields });
+    res
+      .status(400)
+      .json({ message: "Please fill in all the fields", emptyFields });
   }
 
   try {
-    const workout = await Workout.create({ title, load, reps });
+    const user_id = req.user._id;
+    const workout = await Workout.create({ title, load, reps, user_id });
     res.status(200).json(workout);
   } catch (error) {
     res.status(400).json({ message: error.message });
